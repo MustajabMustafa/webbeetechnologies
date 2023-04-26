@@ -36,7 +36,47 @@ class CreateCinemaSchema extends Migration
      */
     public function up()
     {
-        throw new \Exception('implement in coding task 4, you can ignore this exception if you are just running the initial migrations.');
+        Schema::create('movies', function($table) {
+            $table->increments('id');
+            $table->string('title');
+            $table->string('description');
+            $table->string('duration');
+            $table->string('rating');
+            $table->timestamps();
+        });
+
+        Schema::create('shows', function($table) {
+            $table->increments('id');
+            $table->foreign('movie_id')->references('id')->on('movies');
+            $table->foreign('room_id')->references('id')->on('rooms');
+            $table->string('show_time');
+            $table->string('price');
+            $table->timestamps();
+        });
+
+        Schema::create('rooms', function($table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->string('capacity');
+            $table->timestamps();
+        });
+
+        Schema::create('seats', function($table) {
+            $table->increments('id');
+            $table->foreign('seat_type_id')->references('id')->on('seat_types');
+            $table->foreign('room_id')->references('id')->on('rooms');
+            $table->integer('row_number');
+            $table->integer('seat_number');
+            $table->timestamps();
+        });
+
+        Schema::create('seat_types', function($table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->string('price_premium');
+            $table->timestamps();
+        });
+        //throw new \Exception('implement in coding task 4, you can ignore this exception if you are just running the initial migrations.');
     }
 
     /**

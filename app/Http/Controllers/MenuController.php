@@ -94,25 +94,16 @@ class MenuController extends BaseController
 
     public function getMenuItems() {
         $items = MenuItem::whereNull('parent_id')->get();
-
-        // Recursively add children to each item
         foreach ($items as $item) {
             $item->children = $this->getChildren($item);
         }
-
-        // Return the top-level items with their children
         return $items;
-}
-private function getChildren($item)
-{
-    // Get all children of the current item
-    $children = MenuItem::where('parent_id', $item->id)->get();
-
-    // Recursively add children to each child item
-    foreach ($children as $child) {
-        $child->children = $this->getChildren($child);
     }
-
-    return $children;
-}
+    private function getChildren($item){
+        $children = MenuItem::where('parent_id', $item->id)->get();
+        foreach ($children as $child) {
+            $child->children = $this->getChildren($child);
+        }
+        return $children;
+    }
 }
